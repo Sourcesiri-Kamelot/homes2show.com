@@ -1,0 +1,326 @@
+# DynamoDB Tables Configuration - Homes2Show
+# Created by: Nyasha Bivins | Powered by: Helo IM AI Inc.
+# AWS Account: 699475940746 | Domain: homes2show.com
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'DynamoDB tables for Homes2Show AI-powered real estate platform'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: 'prod'
+    AllowedValues: ['dev', 'staging', 'prod']
+    Description: 'Environment name'
+  
+  ProjectName:
+    Type: String
+    Default: 'homes2show'
+    Description: 'Project name for resource naming'
+
+Resources:
+  # Users Table - Core user profiles and authentication data
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${ProjectName}-users-${Environment}'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: email
+          AttributeType: S
+        - AttributeName: createdAt
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: EmailIndex
+          KeySchema:
+            - AttributeName: email
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+        - IndexName: CreatedAtIndex
+          KeySchema:
+            - AttributeName: createdAt
+              KeyType: HASH
+          Projection:
+            ProjectionType: KEYS_ONLY
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      SSESpecification:
+        SSEEnabled: true
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: CreatedBy
+          Value: 'Nyasha Bivins'
+        - Key: PoweredBy
+          Value: 'Helo IM AI Inc'
+
+  # Showing Requests Table - Property showing requests and management
+  ShowingRequestsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${ProjectName}-showing-requests-${Environment}'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: requestId
+          AttributeType: S
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: createdAt
+          AttributeType: S
+        - AttributeName: status
+          AttributeType: S
+        - AttributeName: propertyAddress
+          AttributeType: S
+      KeySchema:
+        - AttributeName: requestId
+          KeyType: HASH
+        - AttributeName: createdAt
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: UserIdIndex
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: StatusIndex
+          KeySchema:
+            - AttributeName: status
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: PropertyAddressIndex
+          KeySchema:
+            - AttributeName: propertyAddress
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: KEYS_ONLY
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      SSESpecification:
+        SSEEnabled: true
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: CreatedBy
+          Value: 'Nyasha Bivins'
+        - Key: PoweredBy
+          Value: 'Helo IM AI Inc'
+
+  # Pricing Data Table - AI pricing analysis cache and history
+  PricingDataTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${ProjectName}-pricing-data-${Environment}'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: propertyId
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: S
+        - AttributeName: region
+          AttributeType: S
+      KeySchema:
+        - AttributeName: propertyId
+          KeyType: HASH
+        - AttributeName: timestamp
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: RegionIndex
+          KeySchema:
+            - AttributeName: region
+              KeyType: HASH
+            - AttributeName: timestamp
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      TimeToLiveSpecification:
+        AttributeName: expiresAt
+        Enabled: true
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      SSESpecification:
+        SSEEnabled: true
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: CreatedBy
+          Value: 'Nyasha Bivins'
+        - Key: PoweredBy
+          Value: 'Helo IM AI Inc'
+
+  # Market Data Table - Market insights and trends analysis
+  MarketDataTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${ProjectName}-market-data-${Environment}'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: region
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: S
+        - AttributeName: dataType
+          AttributeType: S
+      KeySchema:
+        - AttributeName: region
+          KeyType: HASH
+        - AttributeName: timestamp
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: DataTypeIndex
+          KeySchema:
+            - AttributeName: dataType
+              KeyType: HASH
+            - AttributeName: timestamp
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      SSESpecification:
+        SSEEnabled: true
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: CreatedBy
+          Value: 'Nyasha Bivins'
+        - Key: PoweredBy
+          Value: 'Helo IM AI Inc'
+
+  # Feedback Data Table - AI feedback processing and analysis
+  FeedbackDataTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub '${ProjectName}-feedback-data-${Environment}'
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: feedbackId
+          AttributeType: S
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: createdAt
+          AttributeType: S
+        - AttributeName: requestId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: feedbackId
+          KeyType: HASH
+        - AttributeName: createdAt
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: UserIdIndex
+          KeySchema:
+            - AttributeName: userId
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: RequestIdIndex
+          KeySchema:
+            - AttributeName: requestId
+              KeyType: HASH
+            - AttributeName: createdAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      SSESpecification:
+        SSEEnabled: true
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: CreatedBy
+          Value: 'Nyasha Bivins'
+        - Key: PoweredBy
+          Value: 'Helo IM AI Inc'
+
+Outputs:
+  UsersTableName:
+    Description: 'Name of the Users table'
+    Value: !Ref UsersTable
+    Export:
+      Name: !Sub '${AWS::StackName}-UsersTable'
+
+  UsersTableArn:
+    Description: 'ARN of the Users table'
+    Value: !GetAtt UsersTable.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-UsersTableArn'
+
+  ShowingRequestsTableName:
+    Description: 'Name of the Showing Requests table'
+    Value: !Ref ShowingRequestsTable
+    Export:
+      Name: !Sub '${AWS::StackName}-ShowingRequestsTable'
+
+  ShowingRequestsTableArn:
+    Description: 'ARN of the Showing Requests table'
+    Value: !GetAtt ShowingRequestsTable.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-ShowingRequestsTableArn'
+
+  PricingDataTableName:
+    Description: 'Name of the Pricing Data table'
+    Value: !Ref PricingDataTable
+    Export:
+      Name: !Sub '${AWS::StackName}-PricingDataTable'
+
+  PricingDataTableArn:
+    Description: 'ARN of the Pricing Data table'
+    Value: !GetAtt PricingDataTable.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-PricingDataTableArn'
+
+  MarketDataTableName:
+    Description: 'Name of the Market Data table'
+    Value: !Ref MarketDataTable
+    Export:
+      Name: !Sub '${AWS::StackName}-MarketDataTable'
+
+  MarketDataTableArn:
+    Description: 'ARN of the Market Data table'
+    Value: !GetAtt MarketDataTable.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-MarketDataTableArn'
+
+  FeedbackDataTableName:
+    Description: 'Name of the Feedback Data table'
+    Value: !Ref FeedbackDataTable
+    Export:
+      Name: !Sub '${AWS::StackName}-FeedbackDataTable'
+
+  FeedbackDataTableArn:
+    Description: 'ARN of the Feedback Data table'
+    Value: !GetAtt FeedbackDataTable.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-FeedbackDataTableArn'

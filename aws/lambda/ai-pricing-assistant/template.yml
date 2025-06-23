@@ -1,0 +1,216 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'AI Pricing Assistant Lambda Function for Homes2Show'
+
+# Global configuration
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: nodejs18.x
+    Architectures:
+      - x86_64
+    Environment:
+      Variables:
+        NODE_ENV: !Ref Environment
+        ENVIRONMENT: !Ref Environment
+    Tags:
+      Project: Homes2Show
+      CreatedBy: 'Nyasha Bivins'
+      PoweredBy: 'Helo IM AI Inc'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: 'prod'
+    AllowedValues: ['dev', 'staging', 'prod']
+    Description: 'Environment name'
+  
+  ProjectName:
+    Type: String
+    Default: 'homes2show'
+    Description: 'Project name for resource naming'
+  
+  OpenAIApiKey:
+    Type: String
+    NoEcho: true
+    Description: 'OpenAI API Key for AI pricing analysis'
+  
+  PricingDataTableName:
+    Type: String
+    Description: 'Name of the DynamoDB pricing data table'
+  
+  MarketDataTableName:
+    Type: String
+    Description: 'Name of the DynamoDB market data table'
+
+Resources:
+  # AI Pricing Assistant Lambda Function
+  AIPricingAssistantFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-ai-pricing-assistant-${Environment}'
+      CodeUri: ./
+      Handler: index.handler
+      Description: 'AI-powered pricing assistant for real estate showings'
+      Environment:
+        Variables:
+          OPENAI_API_KEY: !Ref OpenAIApiKey
+          PRICING_DATA_TABLE: !Ref PricingDataTableName
+          MARKET_DATA_TABLE: !Ref MarketDataTableName
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref PricingDataTableName
+        - DynamoDBReadPolicy:
+            TableName: !Ref MarketDataTableName
+        - CloudWatchPutMetricPolicy: {}
+        - AWSXRayDaemonWriteAccess
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /api/pricing
+            Method: post
+            RestApiId: !Ref AIPricingApi
+      Tracing: Active
+      ReservedConcurrencyLimit: 10
+      DeadLetterQueue:
+        Type: SQS
+        TargetArn: !GetAtt AIPricingDLQ.Arn
+
+  # API Gateway for the pricing assistant
+  AIPricingApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub '${ProjectName}-ai-pricing-api-${Environment}'
+      StageName: !Ref Environment
+      Cors:
+        AllowMethods: "'POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
+      GatewayResponses:
+        DEFAULT_4XX:
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Headers: "'Content-Type,Authorization'"
+        DEFAULT_5XX:
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Headers: "'Content-Type,Authorization'"
+      RequestValidators:
+        RequestValidator:
+          ValidateRequestBody: true
+          ValidateRequestParameters: true
+      Models:
+        PricingRequest:
+          type: object
+          required:
+            - propertyAddress
+            - propertyType
+          properties:
+            propertyAddress:
+              type: string
+              minLength: 5
+              maxLength: 200
+            propertyType:
+              type: string
+              enum: ['single-family', 'condo', 'townhouse', 'apartment', 'duplex', 'commercial']
+            showingDateTime:
+              type: string
+              format: date-time
+            additionalInfo:
+              type: string
+              maxLength: 1000
+
+  # Dead Letter Queue for failed invocations
+  AIPricingDLQ:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub '${ProjectName}-ai-pricing-dlq-${Environment}'
+      MessageRetentionPeriod: 1209600 # 14 days
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Environment
+          Value: !Ref Environment
+
+  # CloudWatch Log Group
+  AIPricingLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${ProjectName}-ai-pricing-assistant-${Environment}'
+      RetentionInDays: 30
+
+  # CloudWatch Alarms
+  AIPricingErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${ProjectName}-ai-pricing-errors-${Environment}'
+      AlarmDescription: 'AI Pricing Assistant error rate alarm'
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 5
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref AIPricingAssistantFunction
+      AlarmActions:
+        - !Ref AIPricingAlarmTopic
+
+  AIPricingDurationAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${ProjectName}-ai-pricing-duration-${Environment}'
+      AlarmDescription: 'AI Pricing Assistant duration alarm'
+      MetricName: Duration
+      Namespace: AWS/Lambda
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 25000 # 25 seconds
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref AIPricingAssistantFunction
+      AlarmActions:
+        - !Ref AIPricingAlarmTopic
+
+  # SNS Topic for alarms
+  AIPricingAlarmTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub '${ProjectName}-ai-pricing-alarms-${Environment}'
+      DisplayName: 'Homes2Show AI Pricing Alarms'
+
+  # Lambda Permission for API Gateway
+  AIPricingLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref AIPricingAssistantFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub '${AIPricingApi}/*/POST/api/pricing'
+
+Outputs:
+  AIPricingAssistantFunctionArn:
+    Description: 'AI Pricing Assistant Lambda Function ARN'
+    Value: !GetAtt AIPricingAssistantFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-AIPricingAssistantFunctionArn'
+
+  AIPricingApiUrl:
+    Description: 'API Gateway endpoint URL for AI Pricing Assistant'
+    Value: !Sub 'https://${AIPricingApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}/api/pricing'
+    Export:
+      Name: !Sub '${AWS::StackName}-AIPricingApiUrl'
+
+  AIPricingApiId:
+    Description: 'API Gateway ID'
+    Value: !Ref AIPricingApi
+    Export:
+      Name: !Sub '${AWS::StackName}-AIPricingApiId'

@@ -1,0 +1,144 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Complete API Gateway for Homes2Show AI Platform'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: 'prod'
+  ProjectName:
+    Type: String
+    Default: 'homes2show'
+  DomainName:
+    Type: String
+    Default: 'api.homes2show.com'
+
+Globals:
+  Api:
+    Cors:
+      AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+      AllowHeaders: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key'"
+      AllowOrigin: "'*'"
+
+Resources:
+  # Main API Gateway
+  Homes2ShowAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub '${ProjectName}-api-${Environment}'
+      StageName: !Ref Environment
+      Domain:
+        DomainName: !Ref DomainName
+        CertificateArn: !Ref SSLCertificate
+      MethodSettings:
+        - ResourcePath: '/*'
+          HttpMethod: '*'
+          ThrottlingRateLimit: 1000
+          ThrottlingBurstLimit: 2000
+      RequestValidators:
+        RequestValidator:
+          ValidateRequestBody: true
+          ValidateRequestParameters: true
+
+  # SSL Certificate
+  SSLCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref DomainName
+      ValidationMethod: DNS
+
+  # Lambda Functions
+  AIPricingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-ai-pricing-${Environment}'
+      CodeUri: lambda/ai-pricing-assistant/
+      Handler: index.handler
+      Runtime: nodejs18.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Homes2ShowAPI
+            Path: /api/pricing
+            Method: post
+
+  FeedbackProcessorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-feedback-processor-${Environment}'
+      CodeUri: lambda/feedback-processor/
+      Handler: index.handler
+      Runtime: nodejs18.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Homes2ShowAPI
+            Path: /api/feedback
+            Method: post
+
+  MarketInsightsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-market-insights-${Environment}'
+      CodeUri: lambda/market-insights/
+      Handler: index.handler
+      Runtime: nodejs18.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Homes2ShowAPI
+            Path: /api/insights
+            Method: get
+        ScheduleEvent:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 hour)
+
+  UserManagementFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-user-management-${Environment}'
+      CodeUri: lambda/user-management/
+      Handler: index.handler
+      Runtime: nodejs18.x
+      Events:
+        GetUser:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Homes2ShowAPI
+            Path: /api/users/{userId}
+            Method: get
+        CreateUser:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Homes2ShowAPI
+            Path: /api/users
+            Method: post
+        UpdateUser:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Homes2ShowAPI
+            Path: /api/users/{userId}
+            Method: put
+        DeleteUser:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Homes2ShowAPI
+            Path: /api/users/{userId}
+            Method: delete
+
+Outputs:
+  ApiUrl:
+    Description: 'API Gateway endpoint URL'
+    Value: !Sub 'https://${Homes2ShowAPI}.execute-api.${AWS::Region}.amazonaws.com/${Environment}'
+    Export:
+      Name: !Sub '${AWS::StackName}-ApiUrl'
+
+  CustomDomainUrl:
+    Description: 'Custom domain URL'
+    Value: !Sub 'https://${DomainName}'
+    Export:
+      Name: !Sub '${AWS::StackName}-CustomDomainUrl'

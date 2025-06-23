@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'API Gateway for Homes2Show AI Platform - Created by Nyasha Bivins'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: 'prod'
+
+Resources:
+  Homes2ShowAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub 'homes2show-api-${Environment}'
+      StageName: !Ref Environment
+      Cors:
+        AllowMethods: "'*'"
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+
+  AIPricingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: lambda/ai-pricing-assistant/
+      Handler: index.handler
+      Runtime: nodejs18.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Homes2ShowAPI
+            Path: /api/pricing
+            Method: post
+
+Outputs:
+  ApiUrl:
+    Value: !Sub 'https://${Homes2ShowAPI}.execute-api.${AWS::Region}.amazonaws.com/${Environment}'

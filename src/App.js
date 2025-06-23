@@ -1,38 +1,63 @@
-import React, { useState } from 'react';
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
-import HomePage from './pages/HomePage';
-import PricingPage from './pages/PricingPage';
-import DashboardPage from './pages/DashboardPage';
+import LoadingSpinner from './components/common/LoadingSpinner';
+
+// Lazy load pages for better performance
+const HomePage = lazy(() => import('./pages/HomePage'));
+const PricingPage = lazy(() => import('./pages/PricingPage'));
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 
 /**
- * Main App Component
- * AI-Powered Real Estate Platform - Homes2Show
- * Professional, scalable architecture with intelligent features
+ * Main App Component - Homes2Show AI Platform
+ * Created by: Nyasha Bivins
+ * Powered by: Helo IM AI Inc. | https://www.helo-im.ai
+ * 
+ * Phase 2: React Router Implementation
+ * - URL-based navigation with AWS optimization
+ * - Protected routes preparation for AWS Cognito
+ * - Mobile-responsive design with AI enhancement
  */
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home');
-
-  const renderPage = () => {
-    switch(currentPage) {
-      case 'home':
-        return <HomePage setCurrentPage={setCurrentPage} />;
-      case 'pricing':
-        return <PricingPage />;
-      case 'dashboard':
-        return <DashboardPage />;
-      default:
-        return <HomePage setCurrentPage={setCurrentPage} />;
-    }
-  }
-
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      <main className="flex-grow">
-        {renderPage()}
-      </main>
-      <Footer />
-    </div>
+    <Router>
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 via-white to-gray-50">
+        {/* Navigation */}
+        <Navbar />
+        
+        {/* Main Content with Suspense for lazy loading */}
+        <main className="flex-grow">
+          <Suspense fallback={<LoadingSpinner />}>
+            <Routes>
+              {/* Public Routes */}
+              <Route 
+                path="/" 
+                element={<HomePage />} 
+              />
+              <Route 
+                path="/pricing" 
+                element={<PricingPage />} 
+              />
+              
+              {/* Protected Route - Dashboard */}
+              <Route 
+                path="/dashboard" 
+                element={<DashboardPage />} 
+              />
+              
+              {/* Catch-all route - redirect to home */}
+              <Route 
+                path="*" 
+                element={<HomePage />} 
+              />
+            </Routes>
+          </Suspense>
+        </main>
+        
+        {/* Footer */}
+        <Footer />
+      </div>
+    </Router>
   );
 }

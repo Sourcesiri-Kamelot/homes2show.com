@@ -19,6 +19,30 @@ openai-key.txt
 stripe-keys.json
 aws-credentials.json
 
+# === CRITICAL PROTECTED FILES ===
+# These files contain sensitive data or are client-locked
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.json
+config.production.json
+.aws/credentials
+.aws/config
+
+# MCP Server Credentials
+.mcp-secrets.json
+mcp-server-*.key
+
+# Database credentials
+database.env
+db-config.json
+
+# SSL Certificates
+*.crt
+*.cert
+ssl/
+
 # === NODE.JS ===
 node_modules/
 npm-debug.log*

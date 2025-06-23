@@ -4,6 +4,7 @@ import React from 'react';
  * Footer Component
  * Professional footer for Homes2Show AI platform
  * Features AI branding and comprehensive site links
+ * Created by: Nyasha Bivins | Powered by: Helo IM AI Inc.
  */
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -50,11 +51,18 @@ const Footer = () => {
                 AI-Powered
               </span>
             </div>
-            <p className="text-gray-300 text-sm leading-relaxed max-w-md">
+            <p className="text-gray-300 text-sm leading-relaxed max-w-md mb-4">
               Revolutionizing real estate showings with artificial intelligence. 
               Connect with agents, optimize schedules, and close more deals with 
               our advanced AI platform.
             </p>
+            
+            {/* Creator Attribution */}
+            <div className="text-xs text-gray-400 space-y-1">
+              <p>Created by <span className="text-orange-400 font-medium">Nyasha Bivins</span></p>
+              <p>Powered by <a href="https://www.helo-im.ai" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 transition-colors duration-200 font-medium">Helo IM AI Inc.</a></p>
+            </div>
+            
             <div className="flex items-center mt-4 space-x-4">
               <div className="flex items-center text-xs text-gray-400">
                 <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
@@ -103,13 +111,17 @@ const Footer = () => {
             ))}
           </nav>
 
-          {/* Copyright and AI Attribution */}
-          <div className="flex flex-col sm:flex-row justify-between items-center text-center sm:text-left">
-            <p className="text-gray-400 text-sm">
-              &copy; {currentYear} Homes2Show. All rights reserved. 
-              <span className="ml-2 text-orange-400">Powered by Advanced AI</span>
-            </p>
-            <div className="flex items-center mt-4 sm:mt-0 space-x-4">
+          {/* Copyright and Attribution */}
+          <div className="flex flex-col sm:flex-row justify-between items-center text-center sm:text-left space-y-4 sm:space-y-0">
+            <div className="text-gray-400 text-sm">
+              <p>&copy; {currentYear} Homes2Show. All rights reserved.</p>
+              <p className="mt-1">
+                Created by <span className="text-orange-400">Nyasha Bivins</span> | 
+                Powered by <a href="https://www.helo-im.ai" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 transition-colors duration-200">Helo IM AI Inc.</a>
+              </p>
+            </div>
+            
+            <div className="flex items-center space-x-4">
               <div className="flex items-center text-xs text-gray-500">
                 <svg className="w-3 h-3 mr-1 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M10 2.5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5a.75.75 0 01.75-.75z"/>
@@ -117,8 +129,16 @@ const Footer = () => {
                 Built with Intelligence
               </div>
               <div className="text-xs text-gray-500">
-                Version 1.0.0
+                Version 2.0.0
               </div>
+              <a 
+                href="https://www.helo-im.ai" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs text-orange-400 hover:text-orange-300 transition-colors duration-200"
+              >
+                Learn More →
+              </a>
             </div>
           </div>
         </div>

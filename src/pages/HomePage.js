@@ -1,11 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 /**
  * HomePage Component
  * AI-enhanced landing page for Homes2Show platform
  * Features intelligent design and conversion optimization
+ * Created by: Nyasha Bivins | Powered by: Helo IM AI Inc.
  */
-const HomePage = ({ setCurrentPage }) => {
+const HomePage = () => {
   return (
     <div className="bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden">
       {/* AI-themed background elements */}
@@ -87,8 +89,8 @@ const HomePage = ({ setCurrentPage }) => {
 
             {/* CTA Section */}
             <div className="mt-12 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center">
-              <button
-                onClick={() => setCurrentPage('pricing')}
+              <Link
+                to="/pricing"
                 className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl shadow-2xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-500/50"
               >
                 <span className="relative z-10">View Plans & Start Free</span>
@@ -98,7 +100,7 @@ const HomePage = ({ setCurrentPage }) => {
                 
                 {/* Button glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
-              </button>
+              </Link>
             </div>
 
             {/* Trust Indicators */}

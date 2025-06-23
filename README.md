@@ -1,4 +1,4 @@
-# homes2show.com
+# homes2show.com Created by. Nyasha Bivins - Realtor - Maryland - nbivins@homes2show.com
 <div align="center">
   <img src="https://placehold.co/600x200/ff6600/ffffff?text=Homes2Show&font=raleway" alt="Homes2Show Banner" style="border-radius: 12px;"/>
   <h1>Homes2Show - The AI-Powered Real Estate Showing Platform</h1>

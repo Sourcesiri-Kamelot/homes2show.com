@@ -1,0 +1,115 @@
+/* Homes2Show - AI-Powered Real Estate Platform Styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* === CUSTOM CSS VARIABLES === */
+:root {
+  --primary-orange: #f97316;
+  --primary-orange-dark: #ea580c;
+  --primary-orange-light: #fed7aa;
+  --ai-purple: #8b5cf6;
+  --ai-blue: #3b82f6;
+  --success-green: #10b981;
+  --error-red: #ef4444;
+  --warning-yellow: #f59e0b;
+  --neutral-gray: #6b7280;
+  --dark-gray: #374151;
+  --light-gray: #f9fafb;
+}
+
+/* === GLOBAL STYLES === */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--light-gray);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* === AI-ENHANCED COMPONENTS === */
+.ai-gradient {
+  background: linear-gradient(135deg, var(--ai-purple), var(--ai-blue));
+}
+
+.ai-glow {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.homes2show-gradient {
+  background: linear-gradient(135deg, var(--primary-orange), var(--primary-orange-dark));
+}
+
+/* === ANIMATIONS === */
+@keyframes pulse-ai {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.pulse-ai {
+  animation: pulse-ai 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 640px) {
+  .mobile-hidden {
+    display: none;
+  }
+}
+
+/* === ACCESSIBILITY === */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* === FOCUS STYLES === */
+.focus-ring:focus {
+  outline: 2px solid var(--primary-orange);
+  outline-offset: 2px;
+}
+
+/* === LOADING STATES === */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}

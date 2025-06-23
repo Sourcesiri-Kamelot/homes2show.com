@@ -1,0 +1,117 @@
+# Homes2Show - Professional .gitignore
+# AI-Powered Real Estate Platform
+
+# === CREDENTIALS & SECRETS (NEVER COMMIT) ===
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.staging
+
+# Firebase credentials
+firebase-config.js
+serviceAccountKey.json
+firebase-adminsdk-*.json
+
+# API Keys
+openai-key.txt
+stripe-keys.json
+aws-credentials.json
+
+# === NODE.JS ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# === REACT BUILD ===
+build/
+dist/
+.next/
+out/
+
+# === DEVELOPMENT ===
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# === LOGS ===
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === CACHE ===
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+
+# === TESTING ===
+coverage/
+.nyc_output/
+junit.xml
+
+# === DEPLOYMENT ===
+.vercel
+.netlify/
+.firebase/
+
+# === AI & ML ===
+*.model
+*.pkl
+*.h5
+training_data/
+model_weights/
+
+# === LARGE FILES (Git LFS) ===
+*.zip
+*.tar.gz
+*.rar
+*.7z
+*.dmg
+*.iso
+*.img
+*.video
+*.mov
+*.mp4
+*.avi
+*.mkv
+*.webm
+
+# === TEMPORARY ===
+tmp/
+temp/
+.tmp/
+.temp/
+
+# === BACKUP FILES ===
+*.bak
+*.backup
+*.old
+*~
+
+# === LOCK FILES (PROTECTED) ===
+# Note: These files are LOCKED and should never be modified
+# index.html - STYLE LOCKED
+# package-lock.json - Keep for dependency consistency

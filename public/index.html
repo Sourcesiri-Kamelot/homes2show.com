@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f97316" />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="AI-powered real estate showing platform. Connect with showing agents, optimize your schedule, and close more deals with intelligent automation." />
+    <meta name="keywords" content="real estate, AI, property showing, real estate agents, home showing, property management" />
+    <meta name="author" content="Homes2Show" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://homes2show.com/" />
+    <meta property="og:title" content="Homes2Show - AI-Powered Real Estate Showings" />
+    <meta property="og:description" content="Leverage AI to connect with showing agents, optimize your schedule, and close more deals. Never miss an opportunity." />
+    <meta property="og:image" content="%PUBLIC_URL%/og-image.jpg" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://homes2show.com/" />
+    <meta property="twitter:title" content="Homes2Show - AI-Powered Real Estate Showings" />
+    <meta property="twitter:description" content="Leverage AI to connect with showing agents, optimize your schedule, and close more deals. Never miss an opportunity." />
+    <meta property="twitter:image" content="%PUBLIC_URL%/twitter-image.jpg" />
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://api.openai.com">
+    <link rel="preconnect" href="https://firebaseapp.com">
+    
+    <!-- Google Fonts - Professional Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Homes2Show",
+      "description": "AI-powered real estate showing platform",
+      "url": "https://homes2show.com",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "150"
+      }
+    }
+    </script>
+    
+    <title>Homes2Show - AI-Powered Real Estate Showings</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this AI-powered real estate application.</noscript>
+    <div id="root"></div>
+    
+    <!-- Performance monitoring -->
+    <script>
+      // Critical performance metrics
+      window.addEventListener('load', function() {
+        if ('performance' in window) {
+          const perfData = performance.getEntriesByType('navigation')[0];
+          console.log('Page Load Time:', perfData.loadEventEnd - perfData.loadEventStart, 'ms');
+        }
+      });
+    </script>
+  </body>
+</html>

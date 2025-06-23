@@ -1,12 +1,358 @@
-# Homes2Show AWS Configuration
-# AI-Powered Real Estate Platform - AWS Best Practices
+# Homes2Show AWS Configuration - UPDATED FOR AWS-NATIVE ARCHITECTURE
+# AI-Powered Real Estate Platform - AWS Account: 699475940746
 
 project:
   name: homes2show
   type: ai-platform
-  environment: development
+  environment: production
   region: us-east-1
-  domain: homes2show.com
+  domain: homes2show.com  # LIVE IN ROUTE 53 ✅
+  aws_account: "699475940746"
+  owner: heloimai@helo-im.ai
+
+# AWS Services Configuration - NATIVE AWS STACK
+services:
+  # Route 53 - DNS Management (ALREADY CONFIGURED ✅)
+  route53:
+    status: LIVE_AND_CONFIGURED
+    hosted_zone_id: ${AWS_ROUTE53_ZONE_ID}
+    domain: homes2show.com
+    nameservers:  # ACTIVE ✅
+      - ns-852.awsdns-42.net
+      - ns-2040.awsdns-63.co.uk
+      - ns-206.awsdns-25.com
+      - ns-1027.awsdns-00.org
+    records:
+      - type: SOA
+        ttl: 900
+        value: "ns-852.awsdns-42.net. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400"
+    subdomains:
+      - api.homes2show.com  # API Gateway custom domain
+      - cdn.homes2show.com  # CloudFront alias
+    health_checks: enabled
+    failover: enabled
+
+  # S3 - Frontend Hosting (REPLACES VERCEL)
+  s3:
+    frontend_hosting:
+      bucket_name: homes2show-frontend-prod
+      region: us-east-1
+      website_hosting: enabled
+      index_document: index.html
+      error_document: error.html
+      versioning: enabled
+      encryption: AES256
+      public_access: restricted_via_cloudfront_only
+      
+    buckets:
+      assets:
+        name: homes2show-assets
+        region: us-east-1
+        versioning: enabled
+        encryption: AES256
+        cors_enabled: true
+        lifecycle_rules:
+          - transition_to_ia: 30_days
+          - transition_to_glacier: 90_days
+          - expiration: 365_days
+      backups:
+        name: homes2show-backups
+        region: us-east-1
+        versioning: enabled
+        encryption: KMS
+        cross_region_replication: us-west-2
+      logs:
+        name: homes2show-logs
+        region: us-east-1
+        retention: 90_days
+        encryption: AES256
+
+  # CloudFront - CDN (REPLACES VERCEL CDN)
+  cloudfront:
+    distribution_config:
+      origins:
+        - domain: homes2show-frontend-prod.s3.amazonaws.com
+          origin_id: S3-Frontend
+          s3_origin_config:
+            origin_access_identity: ${CLOUDFRONT_OAI}
+      default_cache_behavior:
+        target_origin_id: S3-Frontend
+        viewer_protocol_policy: redirect-to-https
+        compress: true
+        cache_policy: Managed-CachingOptimized
+        origin_request_policy: Managed-CORS-S3Origin
+      aliases:
+        - homes2show.com
+        - www.homes2show.com
+      ssl_certificate:
+        acm_certificate_arn: ${ACM_CERTIFICATE_ARN}
+        ssl_support_method: sni-only
+        minimum_protocol_version: TLSv1.2_2021
+      price_class: PriceClass_100
+      compression: enabled
+      security_headers: enabled
+      waf_web_acl_id: ${WAF_WEB_ACL_ID}
+
+  # API Gateway - Backend API
+  api_gateway:
+    name: homes2show-api
+    type: REST
+    stage: prod
+    custom_domain:
+      domain_name: api.homes2show.com
+      certificate_arn: ${ACM_CERTIFICATE_ARN}
+    cors_enabled: true
+    throttling:
+      rate_limit: 1000
+      burst_limit: 2000
+    authentication:
+      - type: cognito_user_pools
+        authorizer: homes2show-cognito-authorizer
+    endpoints:
+      - path: /api/pricing
+        method: POST
+        integration: lambda
+        function: ai_pricing_assistant
+      - path: /api/feedback
+        method: POST
+        integration: lambda
+        function: feedback_processor
+      - path: /api/insights
+        method: GET
+        integration: lambda
+        function: market_insights
+      - path: /api/users
+        method: ANY
+        integration: lambda
+        function: user_management
+
+  # Lambda - Serverless Functions (REPLACES VERCEL FUNCTIONS)
+  lambda:
+    functions:
+      ai_pricing_assistant:
+        runtime: nodejs18.x
+        memory: 512
+        timeout: 30
+        environment:
+          OPENAI_API_KEY: ${OPENAI_API_KEY}
+          DYNAMODB_TABLE: homes2show-pricing-data
+        vpc_config: disabled
+        dead_letter_queue: enabled
+        
+      feedback_processor:
+        runtime: nodejs18.x
+        memory: 256
+        timeout: 15
+        environment:
+          OPENAI_API_KEY: ${OPENAI_API_KEY}
+          DYNAMODB_TABLE: homes2show-feedback-data
+        triggers:
+          - type: api_gateway
+            path: /api/feedback/process
+            method: POST
+
+      market_insights:
+        runtime: nodejs18.x
+        memory: 1024
+        timeout: 60
+        environment:
+          DYNAMODB_TABLE: homes2show-market-data
+          OPENAI_API_KEY: ${OPENAI_API_KEY}
+        schedule: rate(1 hour)
+        
+      user_management:
+        runtime: nodejs18.x
+        memory: 256
+        timeout: 30
+        environment:
+          COGNITO_USER_POOL_ID: ${COGNITO_USER_POOL_ID}
+          DYNAMODB_TABLE: homes2show-users
+
+  # DynamoDB - Primary Database (HYBRID WITH FIREBASE)
+  dynamodb:
+    tables:
+      homes2show-users:
+        partition_key: userId
+        billing_mode: PAY_PER_REQUEST
+        stream_specification:
+          stream_enabled: true
+          stream_view_type: NEW_AND_OLD_IMAGES
+        point_in_time_recovery: enabled
+        global_secondary_indexes:
+          - index_name: email-index
+            partition_key: email
+            projection_type: ALL
+            
+      homes2show-showing-requests:
+        partition_key: requestId
+        sort_key: createdAt
+        billing_mode: PAY_PER_REQUEST
+        global_secondary_indexes:
+          - index_name: userId-index
+            partition_key: userId
+            sort_key: createdAt
+            projection_type: ALL
+            
+      homes2show-pricing-data:
+        partition_key: propertyId
+        sort_key: timestamp
+        billing_mode: PAY_PER_REQUEST
+        ttl_attribute: expiresAt
+        
+      homes2show-market-data:
+        partition_key: region
+        sort_key: timestamp
+        billing_mode: PAY_PER_REQUEST
+
+  # Cognito - Authentication (PRIMARY AUTH)
+  cognito:
+    user_pool:
+      name: homes2show-users
+      policies:
+        password_policy:
+          minimum_length: 8
+          require_uppercase: true
+          require_lowercase: true
+          require_numbers: true
+          require_symbols: true
+      auto_verified_attributes:
+        - email
+      username_attributes:
+        - email
+      mfa_configuration: OPTIONAL
+      
+    user_pool_client:
+      name: homes2show-web-client
+      generate_secret: false
+      supported_identity_providers:
+        - COGNITO
+        - Google
+        - Facebook
+      callback_urls:
+        - https://homes2show.com/auth/callback
+      logout_urls:
+        - https://homes2show.com/auth/logout
+        
+    identity_pool:
+      name: homes2show-identity-pool
+      allow_unauthenticated_identities: false
+
+  # CodePipeline - CI/CD (REPLACES VERCEL AUTO-DEPLOY)
+  codepipeline:
+    name: homes2show-deployment-pipeline
+    stages:
+      - name: Source
+        provider: GitHub
+        repository: ${GITHUB_REPO}
+        branch: main
+        
+      - name: Build
+        provider: CodeBuild
+        project: homes2show-frontend-build
+        buildspec: |
+          version: 0.2
+          phases:
+            pre_build:
+              commands:
+                - echo Installing dependencies...
+                - npm install
+            build:
+              commands:
+                - echo Building React application...
+                - npm run build
+            post_build:
+              commands:
+                - echo Deploying to S3...
+                - aws s3 sync build/ s3://homes2show-frontend-prod --delete
+                - echo Invalidating CloudFront...
+                - aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"
+                
+      - name: Deploy
+        provider: S3
+        bucket: homes2show-frontend-prod
+        extract: true
+
+  # CloudWatch - Monitoring
+  cloudwatch:
+    log_groups:
+      - name: /aws/lambda/homes2show-ai-pricing
+        retention: 30_days
+      - name: /aws/lambda/homes2show-feedback
+        retention: 30_days
+      - name: /aws/lambda/homes2show-insights
+        retention: 30_days
+      - name: /aws/apigateway/homes2show-api
+        retention: 14_days
+      - name: /aws/cloudfront/homes2show
+        retention: 7_days
+        
+    alarms:
+      - name: HighErrorRate
+        metric: ErrorRate
+        namespace: AWS/ApiGateway
+        threshold: 5
+        comparison: GreaterThanThreshold
+        notification: ${SNS_ALERTS_TOPIC}
+        
+      - name: HighLatency
+        metric: Latency
+        namespace: AWS/ApiGateway
+        threshold: 2000
+        comparison: GreaterThanThreshold
+        notification: ${SNS_ALERTS_TOPIC}
+        
+    dashboards:
+      - name: Homes2Show-Platform
+        widgets:
+          - api_gateway_performance
+          - lambda_metrics
+          - dynamodb_metrics
+          - cloudfront_metrics
+          - user_analytics
+          - ai_feature_usage
+          - cost_tracking
+
+  # WAF - Web Application Firewall
+  waf:
+    web_acl:
+      name: homes2show-waf
+      scope: CLOUDFRONT
+      rules:
+        - name: AWSManagedRulesCommonRuleSet
+          priority: 1
+        - name: AWSManagedRulesKnownBadInputsRuleSet
+          priority: 2
+        - name: RateLimitRule
+          priority: 3
+          rate_limit: 2000
+
+  # Secrets Manager - Secure Credential Storage
+  secrets_manager:
+    secrets:
+      - name: homes2show/openai-api-key
+        description: OpenAI API key for AI features
+        
+      - name: homes2show/stripe-keys
+        description: Stripe API keys for payment processing
+        
+      - name: homes2show/firebase-config
+        description: Firebase configuration for hybrid features
+
+# Firebase Integration (HYBRID APPROACH)
+firebase_integration:
+  project_id: homes2show-prod
+  use_cases:
+    - real_time_messaging
+    - push_notifications
+    - file_uploads
+    - social_authentication_backup
+  firestore_collections:
+    - messages
+    - notifications
+    - real_time_updates
+  authentication:
+    role: secondary
+    integration_with_cognito: enabled
 
 # AWS Services Configuration
 services:

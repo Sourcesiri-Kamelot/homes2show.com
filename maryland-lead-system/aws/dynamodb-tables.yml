@@ -1,0 +1,211 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Maryland Real Estate Lead System - DynamoDB Tables'
+
+Resources:
+  # 🏠 MAIN PROPERTIES TABLE
+  MarylandPropertiesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: MarylandProperties
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+        - AttributeName: gsi1pk
+          AttributeType: S
+        - AttributeName: gsi1sk
+          AttributeType: S
+        - AttributeName: gsi2pk
+          AttributeType: S
+        - AttributeName: gsi2sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: GSI1
+          KeySchema:
+            - AttributeName: gsi1pk
+              KeyType: HASH
+            - AttributeName: gsi1sk
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: GSI2
+          KeySchema:
+            - AttributeName: gsi2pk
+              KeyType: HASH
+            - AttributeName: gsi2sk
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+      Tags:
+        - Key: Project
+          Value: MarylandLeadSystem
+        - Key: Environment
+          Value: Production
+
+  # 👤 PROPERTY OWNERS TABLE
+  PropertyOwnersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: PropertyOwners
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+        - AttributeName: gsi1pk
+          AttributeType: S
+        - AttributeName: gsi1sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: GSI1
+          KeySchema:
+            - AttributeName: gsi1pk
+              KeyType: HASH
+            - AttributeName: gsi1sk
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      Tags:
+        - Key: Project
+          Value: MarylandLeadSystem
+        - Key: Environment
+          Value: Production
+
+  # 🎯 LEADS TABLE
+  LeadsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: MarylandLeads
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+        - AttributeName: gsi1pk
+          AttributeType: S
+        - AttributeName: gsi1sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: GSI1
+          KeySchema:
+            - AttributeName: gsi1pk
+              KeyType: HASH
+            - AttributeName: gsi1sk
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      Tags:
+        - Key: Project
+          Value: MarylandLeadSystem
+        - Key: Environment
+          Value: Production
+
+  # 📞 OUTREACH TRACKING TABLE
+  OutreachTrackingTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: OutreachTracking
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+        - AttributeName: gsi1pk
+          AttributeType: S
+        - AttributeName: gsi1sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: GSI1
+          KeySchema:
+            - AttributeName: gsi1pk
+              KeyType: HASH
+            - AttributeName: gsi1sk
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      Tags:
+        - Key: Project
+          Value: MarylandLeadSystem
+        - Key: Environment
+          Value: Production
+
+  # 📝 TEMPLATES TABLE
+  TemplatesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: OutreachTemplates
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      Tags:
+        - Key: Project
+          Value: MarylandLeadSystem
+        - Key: Environment
+          Value: Production
+
+Outputs:
+  MarylandPropertiesTableName:
+    Description: 'Name of the Maryland Properties DynamoDB table'
+    Value: !Ref MarylandPropertiesTable
+    Export:
+      Name: !Sub '${AWS::StackName}-MarylandPropertiesTable'
+
+  PropertyOwnersTableName:
+    Description: 'Name of the Property Owners DynamoDB table'
+    Value: !Ref PropertyOwnersTable
+    Export:
+      Name: !Sub '${AWS::StackName}-PropertyOwnersTable'
+
+  LeadsTableName:
+    Description: 'Name of the Leads DynamoDB table'
+    Value: !Ref LeadsTable
+    Export:
+      Name: !Sub '${AWS::StackName}-LeadsTable'
+
+  OutreachTrackingTableName:
+    Description: 'Name of the Outreach Tracking DynamoDB table'
+    Value: !Ref OutreachTrackingTable
+    Export:
+      Name: !Sub '${AWS::StackName}-OutreachTrackingTable'
+
+  TemplatesTableName:
+    Description: 'Name of the Templates DynamoDB table'
+    Value: !Ref TemplatesTable
+    Export:
+      Name: !Sub '${AWS::StackName}-TemplatesTable'

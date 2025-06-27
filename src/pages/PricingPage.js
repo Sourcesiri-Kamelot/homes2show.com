@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import CheckIcon from '../components/common/CheckIcon';
 import XIcon from '../components/common/XIcon';
 import SparkleIcon from '../components/common/SparkleIcon';
@@ -29,6 +30,7 @@ const PricingPage = () => {
         { text: 'Community & Email Support', included: true },
       ],
       cta: 'Start Free Forever',
+      route: '/signup',
       primary: false,
       badge: 'Most Popular',
       color: 'gray'
@@ -52,6 +54,7 @@ const PricingPage = () => {
         { text: 'Priority Email Support', included: true },
       ],
       cta: 'Upgrade to Pro',
+      route: '/payment?plan=pro',
       primary: true,
       badge: 'Best Value',
       color: 'orange'
@@ -75,6 +78,7 @@ const PricingPage = () => {
         { text: 'Dedicated Phone & Chat Support', included: true },
       ],
       cta: 'Go Premium',
+      route: '/payment?plan=enterprise',
       primary: false,
       badge: 'Full AI Suite',
       color: 'purple'
@@ -212,9 +216,10 @@ const PricingPage = () => {
                     </ul>
 
                     {/* CTA Button */}
-                    <button 
+                    <Link 
+                      to={tier.route}
                       className={`
-                        w-full py-4 px-6 rounded-xl font-semibold text-base transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-offset-2
+                        w-full py-4 px-6 rounded-xl font-semibold text-base transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-offset-2 inline-flex items-center justify-center
                         ${colorClasses.button}
                         ${tier.primary ? 'focus:ring-orange-500/50' : 'focus:ring-gray-500/50'}
                       `}
@@ -223,7 +228,7 @@ const PricingPage = () => {
                       {tier.primary && (
                         <SparkleIcon className="inline-block w-4 h-4 ml-2" />
                       )}
-                    </button>
+                    </Link>
 
                     {/* Additional Info */}
                     {tier.primary && (

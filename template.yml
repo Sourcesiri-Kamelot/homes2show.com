@@ -1,0 +1,377 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Homes2Show Revolutionary AI-Powered Real Estate Platform - Complete Backend'
+
+# Global configuration
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: nodejs18.x
+    Architectures:
+      - x86_64
+    Environment:
+      Variables:
+        NODE_ENV: !Ref Environment
+        ENVIRONMENT: !Ref Environment
+    Tags:
+      Project: Homes2Show
+      CreatedBy: 'Nyasha Bivins'
+      PoweredBy: 'Helo IM AI Inc'
+      CosmicEnergy: 'Stardust and Golden'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: 'prod'
+    AllowedValues: ['dev', 'staging', 'prod']
+    Description: 'Environment name'
+  
+  ProjectName:
+    Type: String
+    Default: 'homes2show'
+    Description: 'Project name for resource naming'
+  
+  StripeSecretKey:
+    Type: String
+    NoEcho: true
+    Description: 'Stripe Secret Key for payment processing'
+    Default: 'sk_test_placeholder'
+
+Resources:
+  # AWS Cognito User Pool
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub '${ProjectName}-users-${Environment}'
+      AliasAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: false
+      Schema:
+        - Name: email
+          AttributeDataType: String
+          Required: true
+          Mutable: true
+        - Name: given_name
+          AttributeDataType: String
+          Required: true
+          Mutable: true
+        - Name: family_name
+          AttributeDataType: String
+          Required: true
+          Mutable: true
+        - Name: phone_number
+          AttributeDataType: String
+          Required: false
+          Mutable: true
+        - Name: plan_type
+          AttributeDataType: String
+          Required: false
+          Mutable: true
+        - Name: agent_license
+          AttributeDataType: String
+          Required: false
+          Mutable: true
+        - Name: brokerage
+          AttributeDataType: String
+          Required: false
+          Mutable: true
+      UserPoolTags:
+        Project: !Ref ProjectName
+        Environment: !Ref Environment
+        CreatedBy: 'Nyasha Bivins'
+        PoweredBy: 'Helo IM AI Inc'
+
+  # Cognito User Pool Client
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: !Sub '${ProjectName}-client-${Environment}'
+      UserPoolId: !Ref UserPool
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_ADMIN_USER_PASSWORD_AUTH
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      SupportedIdentityProviders:
+        - COGNITO
+
+  # Identity Pool
+  IdentityPool:
+    Type: AWS::Cognito::IdentityPool
+    Properties:
+      IdentityPoolName: !Sub '${ProjectName}_identity_pool_${Environment}'
+      AllowUnauthenticatedIdentities: false
+      CognitoIdentityProviders:
+        - ClientId: !Ref UserPoolClient
+          ProviderName: !GetAtt UserPool.ProviderName
+
+  # AI Pricing Assistant Lambda Function
+  AIPricingAssistantFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-ai-pricing-assistant-${Environment}'
+      CodeUri: aws/lambda/ai-pricing-assistant/
+      Handler: index.handler
+      Description: 'AI-powered pricing assistant for real estate showings'
+      Environment:
+        Variables:
+          PRICING_DATA_TABLE: !Sub '${ProjectName}-pricing-data-${Environment}'
+          MARKET_DATA_TABLE: !Sub '${ProjectName}-market-data-${Environment}'
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Sub '${ProjectName}-pricing-data-${Environment}'
+        - DynamoDBReadPolicy:
+            TableName: !Sub '${ProjectName}-market-data-${Environment}'
+        - CloudWatchPutMetricPolicy: {}
+        - AWSXRayDaemonWriteAccess
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /api/pricing
+            Method: post
+            RestApiId: !Ref Homes2ShowApi
+      Tracing: Active
+
+  # Feedback Processor Lambda Function
+  FeedbackProcessorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-feedback-processor-${Environment}'
+      CodeUri: aws/lambda/feedback-processor/
+      Handler: index.handler
+      Description: 'AI-powered feedback processing with sentiment analysis'
+      Environment:
+        Variables:
+          FEEDBACK_TABLE: !Sub '${ProjectName}-feedback-${Environment}'
+          USER_ANALYTICS_TABLE: !Sub '${ProjectName}-user-analytics-${Environment}'
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Sub '${ProjectName}-feedback-${Environment}'
+        - DynamoDBCrudPolicy:
+            TableName: !Sub '${ProjectName}-user-analytics-${Environment}'
+        - CloudWatchPutMetricPolicy: {}
+        - AWSXRayDaemonWriteAccess
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /api/feedback
+            Method: post
+            RestApiId: !Ref Homes2ShowApi
+      Tracing: Active
+
+  # Market Insights Lambda Function
+  MarketInsightsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-market-insights-${Environment}'
+      CodeUri: aws/lambda/market-insights/
+      Handler: index.handler
+      Description: 'AI-powered market insights and trend analysis'
+      Environment:
+        Variables:
+          MARKET_DATA_TABLE: !Sub '${ProjectName}-market-data-${Environment}'
+          PRICING_DATA_TABLE: !Sub '${ProjectName}-pricing-data-${Environment}'
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Sub '${ProjectName}-market-data-${Environment}'
+        - DynamoDBReadPolicy:
+            TableName: !Sub '${ProjectName}-pricing-data-${Environment}'
+        - CloudWatchPutMetricPolicy: {}
+        - AWSXRayDaemonWriteAccess
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /api/market-insights
+            Method: get
+            RestApiId: !Ref Homes2ShowApi
+      Tracing: Active
+
+  # Payment Processor Lambda Function
+  PaymentProcessorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-payment-processor-${Environment}'
+      CodeUri: aws/lambda/payment-processor/
+      Handler: index.handler
+      Description: 'Stripe payment processing with AWS Cognito integration'
+      Environment:
+        Variables:
+          SUBSCRIPTIONS_TABLE: !Sub '${ProjectName}-subscriptions-${Environment}'
+          COGNITO_USER_POOL_ID: !Ref UserPool
+          STRIPE_SECRET_KEY: !Ref StripeSecretKey
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Sub '${ProjectName}-subscriptions-${Environment}'
+        - Statement:
+            - Effect: Allow
+              Action:
+                - cognito-idp:AdminCreateUser
+                - cognito-idp:AdminUpdateUserAttributes
+                - cognito-idp:AdminGetUser
+              Resource: !GetAtt UserPool.Arn
+        - CloudWatchPutMetricPolicy: {}
+        - AWSXRayDaemonWriteAccess
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /api/payment
+            Method: post
+            RestApiId: !Ref Homes2ShowApi
+      Tracing: Active
+
+  # User Management Lambda Function
+  UserManagementFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-user-management-${Environment}'
+      CodeUri: aws/lambda/user-management/
+      Handler: index.handler
+      Description: 'Complete user management system with analytics'
+      Environment:
+        Variables:
+          USERS_TABLE: !Sub '${ProjectName}-users-${Environment}'
+          USER_ANALYTICS_TABLE: !Sub '${ProjectName}-user-analytics-${Environment}'
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Sub '${ProjectName}-users-${Environment}'
+        - DynamoDBCrudPolicy:
+            TableName: !Sub '${ProjectName}-user-analytics-${Environment}'
+        - CloudWatchPutMetricPolicy: {}
+        - AWSXRayDaemonWriteAccess
+      Events:
+        GetUser:
+          Type: Api
+          Properties:
+            Path: /api/users/{id}
+            Method: get
+            RestApiId: !Ref Homes2ShowApi
+        CreateUser:
+          Type: Api
+          Properties:
+            Path: /api/users
+            Method: post
+            RestApiId: !Ref Homes2ShowApi
+        UpdateUser:
+          Type: Api
+          Properties:
+            Path: /api/users/{id}
+            Method: put
+            RestApiId: !Ref Homes2ShowApi
+        DeleteUser:
+          Type: Api
+          Properties:
+            Path: /api/users/{id}
+            Method: delete
+            RestApiId: !Ref Homes2ShowApi
+      Tracing: Active
+
+  # Main API Gateway
+  Homes2ShowApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub '${ProjectName}-api-${Environment}'
+      StageName: !Ref Environment
+      Cors:
+        AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
+      GatewayResponses:
+        DEFAULT_4XX:
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Headers: "'Content-Type,Authorization'"
+        DEFAULT_5XX:
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Headers: "'Content-Type,Authorization'"
+
+  # CloudWatch Log Groups
+  AIPricingLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${ProjectName}-ai-pricing-assistant-${Environment}'
+      RetentionInDays: 30
+
+  FeedbackProcessorLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${ProjectName}-feedback-processor-${Environment}'
+      RetentionInDays: 30
+
+  MarketInsightsLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${ProjectName}-market-insights-${Environment}'
+      RetentionInDays: 30
+
+  UserManagementLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${ProjectName}-user-management-${Environment}'
+      RetentionInDays: 30
+
+Outputs:
+  ApiUrl:
+    Description: 'API Gateway endpoint URL for Homes2Show'
+    Value: !Sub 'https://${Homes2ShowApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}'
+    Export:
+      Name: !Sub '${AWS::StackName}-ApiUrl'
+
+  ApiId:
+    Description: 'API Gateway ID'
+    Value: !Ref Homes2ShowApi
+    Export:
+      Name: !Sub '${AWS::StackName}-ApiId'
+
+  AIPricingFunctionArn:
+    Description: 'AI Pricing Assistant Lambda Function ARN'
+    Value: !GetAtt AIPricingAssistantFunction.Arn
+
+  FeedbackProcessorFunctionArn:
+    Description: 'Feedback Processor Lambda Function ARN'
+    Value: !GetAtt FeedbackProcessorFunction.Arn
+
+  MarketInsightsFunctionArn:
+    Description: 'Market Insights Lambda Function ARN'
+    Value: !GetAtt MarketInsightsFunction.Arn
+
+  UserManagementFunctionArn:
+    Description: 'User Management Lambda Function ARN'
+    Value: !GetAtt UserManagementFunction.Arn
+
+  PaymentProcessorFunctionArn:
+    Description: 'Payment Processor Lambda Function ARN'
+    Value: !GetAtt PaymentProcessorFunction.Arn
+
+  UserPoolId:
+    Description: 'Cognito User Pool ID'
+    Value: !Ref UserPool
+    Export:
+      Name: !Sub '${AWS::StackName}-UserPoolId'
+
+  UserPoolClientId:
+    Description: 'Cognito User Pool Client ID'
+    Value: !Ref UserPoolClient
+    Export:
+      Name: !Sub '${AWS::StackName}-UserPoolClientId'
+
+  IdentityPoolId:
+    Description: 'Cognito Identity Pool ID'
+    Value: !Ref IdentityPool
+    Export:
+      Name: !Sub '${AWS::StackName}-IdentityPoolId'

@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SparkleIcon from '../components/common/SparkleIcon';
+import authService from '../services/authService';
+import adminAuthService from '../services/adminAuthService';
+import AdminDashboard from '../components/admin/AdminDashboard';
+import DualModeSelector from '../components/dashboard/DualModeSelector';
+import ClientDashboard from '../components/dashboard/ClientDashboard';
+import AgentDashboard from '../components/dashboard/AgentDashboard';
 
 /**
  * DashboardPage Component
@@ -7,6 +13,11 @@ import SparkleIcon from '../components/common/SparkleIcon';
  * Showcases advanced AI capabilities and user analytics
  */
 const DashboardPage = () => {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isVipUser, setIsVipUser] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [userMode, setUserMode] = useState('client'); // 'client' or 'agent'
+  
   const [feedbackNotes, setFeedbackNotes] = useState("Client loved the natural light and the high ceilings. The kitchen felt a bit dated for them. They asked about the age of the HVAC system and if the appliances are included. They disliked the color of the master bedroom.");
   const [summarizedFeedback, setSummarizedFeedback] = useState("");
   const [isSummarizing, setIsSummarizing] = useState(false);
@@ -16,6 +27,64 @@ const DashboardPage = () => {
   const [isPricing, setIsPricing] = useState(false);
   const [propertyAddress, setPropertyAddress] = useState("");
   const [showingDateTime, setShowingDateTime] = useState("");
+
+  // Check user authentication and VIP status
+  useEffect(() => {
+    const checkUserStatus = async () => {
+      try {
+        const userResult = await authService.getCurrentUser();
+        if (userResult.success) {
+          setCurrentUser(userResult.user);
+          const email = userResult.user.attributes?.email || userResult.user.username;
+          setIsVipUser(adminAuthService.isVipUser(email));
+        }
+      } catch (error) {
+        console.error('Error checking user status:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkUserStatus();
+  }, []);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show VIP Admin Dashboard for admin users
+  if (isVipUser && currentUser) {
+    const email = currentUser.attributes?.email || currentUser.username;
+    return <AdminDashboard userEmail={email} />;
+  }
+
+  // Regular user dashboard with dual mode
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Dual Mode Selector */}
+        <DualModeSelector 
+          currentMode={userMode} 
+          onModeChange={setUserMode} 
+        />
+
+        {/* Mode-specific Dashboard */}
+        {userMode === 'client' ? (
+          <ClientDashboard userInfo={currentUser} />
+        ) : (
+          <AgentDashboard userInfo={currentUser} />
+        )}
+      </div>
+    </div>
+  );
 
   // User data (would come from Firebase in production)
   const userTier = "Power Agent";

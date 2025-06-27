@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import nyashaImage from '../assets/images/neenew.png';
 
 /**
  * HomePage Component
@@ -45,7 +46,7 @@ const HomePage = () => {
             {/* AI Badge */}
             <div className="inline-flex items-center px-4 py-2 bg-orange-500/20 backdrop-blur-sm border border-orange-500/30 rounded-full mb-8">
               <svg className="w-4 h-4 text-orange-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 2.5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5a.75.75 0 01.75-.75z"/>
+                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
               </svg>
               <span className="text-orange-300 text-sm font-medium">Powered by Advanced AI</span>
             </div>
@@ -69,19 +70,19 @@ const HomePage = () => {
             <div className="mt-8 flex flex-wrap justify-center gap-4 text-sm text-gray-300">
               <div className="flex items-center bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full">
                 <svg className="w-4 h-4 text-orange-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 2.5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5a.75.75 0 01.75-.75z"/>
+                  <path d="M10 3C6.13 3 3 6.13 3 10s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm1 10.93c0 .04-.02.06-.07.06H8.93c-.05 0-.07-.02-.07-.06v-.86c0-.05.02-.07.07-.07h.54c.72 0 1.3-.58 1.3-1.3 0-.72-.58-1.3-1.3-1.3H8.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h.97c1.28 0 2.3 1.02 2.3 2.3 0 .85-.46 1.58-1.14 1.98v.25zm0-3.43c0 .05-.02.07-.07.07H9.07c-.05 0-.07-.02-.07-.07V9.64c0-.05.02-.07.07-.07h1.86c.05 0 .07.02.07.07v.86z"/>
                 </svg>
                 AI Pricing Assistant
               </div>
               <div className="flex items-center bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full">
                 <svg className="w-4 h-4 text-purple-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 2.5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5a.75.75 0 01.75-.75z"/>
+                  <path d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"/>
                 </svg>
                 Smart Matching
               </div>
               <div className="flex items-center bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full">
                 <svg className="w-4 h-4 text-blue-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 2.5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5a.75.75 0 01.75-.75z"/>
+                  <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
                 </svg>
                 Market Insights
               </div>
@@ -90,10 +91,10 @@ const HomePage = () => {
             {/* CTA Section */}
             <div className="mt-12 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center">
               <Link
-                to="/pricing"
+                to="/signup"
                 className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl shadow-2xl hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-orange-500/50"
               >
-                <span className="relative z-10">View Plans & Start Free</span>
+                <span className="relative z-10">Start Your Free Trial</span>
                 <svg className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
@@ -149,7 +150,7 @@ const HomePage = () => {
             <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 hover:shadow-lg transition-all duration-300">
               <div className="w-12 h-12 bg-orange-500 rounded-xl mx-auto mb-4 flex items-center justify-center">
                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 2.5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5a.75.75 0 01.75-.75z"/>
+                  <path d="M10 3C6.13 3 3 6.13 3 10s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm1 10.93c0 .04-.02.06-.07.06H8.93c-.05 0-.07-.02-.07-.06v-.86c0-.05.02-.07.07-.07h.54c.72 0 1.3-.58 1.3-1.3 0-.72-.58-1.3-1.3-1.3H8.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h.97c1.28 0 2.3 1.02 2.3 2.3 0 .85-.46 1.58-1.14 1.98v.25zm0-3.43c0 .05-.02.07-.07.07H9.07c-.05 0-.07-.02-.07-.07V9.64c0-.05.02-.07.07-.07h1.86c.05 0 .07.02.07.07v.86z"/>
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Smart Pricing</h3>
@@ -160,7 +161,7 @@ const HomePage = () => {
             <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 hover:shadow-lg transition-all duration-300">
               <div className="w-12 h-12 bg-purple-500 rounded-xl mx-auto mb-4 flex items-center justify-center">
                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 2.5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5a.75.75 0 01.75-.75z"/>
+                  <path d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"/>
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Intelligent Matching</h3>
@@ -171,12 +172,115 @@ const HomePage = () => {
             <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 hover:shadow-lg transition-all duration-300">
               <div className="w-12 h-12 bg-blue-500 rounded-xl mx-auto mb-4 flex items-center justify-center">
                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 2.5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5a.75.75 0 01.75-.75z"/>
+                  <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Market Intelligence</h3>
               <p className="text-gray-600 text-sm">Get insights on demand patterns, pricing trends, and optimal timing.</p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Founder/Creator Section */}
+      <div className="relative py-16 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Content */}
+            <div className="text-white">
+              <div className="inline-flex items-center px-4 py-2 bg-orange-500/20 backdrop-blur-sm border border-orange-500/30 rounded-full mb-6">
+                <svg className="w-4 h-4 text-orange-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                <span className="text-orange-300 text-sm font-medium">Visionary Creator</span>
+              </div>
+
+              <h2 className="text-4xl font-bold mb-6">
+                Meet the Mind Behind the
+                <span className="block bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
+                  Revolution
+                </span>
+              </h2>
+
+              <p className="text-xl text-gray-300 mb-6 leading-relaxed">
+                <span className="text-orange-400 font-semibold">Nyasha Bivins</span>, the visionary creator of Homes2Show, 
+                combines deep real estate expertise with cutting-edge AI technology to transform how the industry operates.
+              </p>
+
+              <p className="text-gray-400 mb-8 leading-relaxed">
+                Powered by <span className="text-orange-400 font-semibold">Helo IM AI Inc.</span>, this platform represents 
+                the future of real estate technology—where artificial intelligence meets human insight to create 
+                unprecedented value for agents and clients alike.
+              </p>
+
+              <div className="flex flex-wrap gap-4">
+                <div className="flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-3 animate-pulse"></div>
+                  <span className="text-sm text-gray-300">AI Innovation Leader</span>
+                </div>
+                <div className="flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 animate-pulse"></div>
+                  <span className="text-sm text-gray-300">Real Estate Expert</span>
+                </div>
+                <div className="flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full mr-3 animate-pulse"></div>
+                  <span className="text-sm text-gray-300">Technology Visionary</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Image */}
+            <div className="relative">
+              <div className="relative z-10">
+                <img
+                  src={nyashaImage}
+                  alt="Nyasha Bivins - Creator and Visionary of Homes2Show"
+                  className="w-full max-w-md mx-auto rounded-2xl shadow-2xl"
+                  loading="lazy"
+                />
+              </div>
+              
+              {/* Clean decorative elements */}
+              <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full opacity-20 blur-xl"></div>
+              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full opacity-20 blur-xl"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Call to Action Section */}
+      <div className="relative py-16 bg-white">
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Ready to Transform Your Real Estate Business?
+          </h2>
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            Join the AI revolution and experience the future of real estate technology today.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/signup"
+              className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl shadow-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105"
+            >
+              <span className="relative z-10">Start Your Free Trial</span>
+              <svg className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Link>
+            
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-gray-700 bg-gray-100 border border-gray-300 rounded-xl hover:bg-gray-200 transition-all duration-300"
+            >
+              View Demo
+            </Link>
           </div>
         </div>
       </div>

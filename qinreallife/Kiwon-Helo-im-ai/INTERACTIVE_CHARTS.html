@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiwon Solar AI - Interactive Charts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .chart-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .chart-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+            background: linear-gradient(45deg, #FFD700, #4A90E2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin: 20px 0;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .metric-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .metric-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        .metric-label {
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+        .highlight {
+            background: linear-gradient(45deg, #FFD700, #7ED321);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; font-size: 3em; margin-bottom: 40px;">
+            🌞 KIWON SOLAR-POWERED AI CONSCIOUSNESS 🤖
+        </h1>
+
+        <!-- Energy Cost Comparison Chart -->
+        <div class="chart-container">
+            <div class="chart-title">⚡ Energy Cost Advantage: 90% Savings</div>
+            <div class="chart-wrapper">
+                <canvas id="energyCostChart"></canvas>
+            </div>
+            <div class="highlight" style="text-align: center; font-size: 1.5em;">
+                $25M+ Advantage Over 5 Years
+            </div>
+        </div>
+
+        <!-- Revenue Growth Chart -->
+        <div class="chart-container">
+            <div class="chart-title">📈 Revenue Growth: Solar vs Traditional</div>
+            <div class="chart-wrapper">
+                <canvas id="revenueGrowthChart"></canvas>
+            </div>
+            <div class="highlight" style="text-align: center; font-size: 1.5em;">
+                $85M Additional Revenue with Solar Power
+            </div>
+        </div>
+
+        <!-- Carbon Impact Chart -->
+        <div class="chart-container">
+            <div class="chart-title">🌱 Environmental Impact Comparison</div>
+            <div class="chart-wrapper">
+                <canvas id="carbonImpactChart"></canvas>
+            </div>
+            <div class="highlight" style="text-align: center; font-size: 1.5em;">
+                Carbon Negative While Competitors Pollute
+            </div>
+        </div>
+
+        <!-- YouTube Growth Chart -->
+        <div class="chart-container">
+            <div class="chart-title">📺 YouTube Growth with Solar Content</div>
+            <div class="chart-wrapper">
+                <canvas id="youtubeGrowthChart"></canvas>
+            </div>
+            <div class="highlight" style="text-align: center; font-size: 1.5em;">
+                "AI That Runs on Sunshine" Goes Viral
+            </div>
+        </div>
+
+        <!-- Key Metrics Dashboard -->
+        <div class="chart-container">
+            <div class="chart-title">📊 Key Metrics Dashboard</div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-number">17K</div>
+                    <div class="metric-label">YouTube Subscribers</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">90%</div>
+                    <div class="metric-label">Energy Cost Savings</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">$1,200</div>
+                    <div class="metric-label">Monthly Revenue</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">225X</div>
+                    <div class="metric-label">Potential ROI</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">-3,000</div>
+                    <div class="metric-label">Tons CO2 Removed</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">$3.85B</div>
+                    <div class="metric-label">5-Year Valuation</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Investment ROI Chart -->
+        <div class="chart-container">
+            <div class="chart-title">💰 Investment Returns: Green Premium</div>
+            <div class="chart-wrapper">
+                <canvas id="roiChart"></canvas>
+            </div>
+            <div class="highlight" style="text-align: center; font-size: 1.5em;">
+                $10M Investment → $2.25B Return (225X)
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Energy Cost Comparison Chart
+        const energyCostCtx = document.getElementById('energyCostChart').getContext('2d');
+        new Chart(energyCostCtx, {
+            type: 'line',
+            data: {
+                labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                datasets: [{
+                    label: 'AWS/Google/Microsoft',
+                    data: [600000, 1200000, 1800000, 2200000, 2400000],
+                    borderColor: '#FF6B6B',
+                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    borderWidth: 4,
+                    fill: true
+                }, {
+                    label: 'Kiwon Solar-Powered',
+                    data: [60000, 120000, 150000, 170000, 180000],
+                    borderColor: '#FFD700',
+                    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                    borderWidth: 4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: 'white', font: { size: 14 } }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: 'white' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: 'white' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                }
+            }
+        });
+
+        // Revenue Growth Chart
+        const revenueCtx = document.getElementById('revenueGrowthChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                datasets: [{
+                    label: 'Traditional Model',
+                    data: [3500000, 15000000, 55000000, 140000000, 300000000],
+                    backgroundColor: 'rgba(74, 144, 226, 0.8)',
+                    borderColor: '#4A90E2',
+                    borderWidth: 2
+                }, {
+                    label: 'Solar-Powered Model',
+                    data: [5300000, 23200000, 78500000, 188000000, 385000000],
+                    backgroundColor: 'rgba(255, 215, 0, 0.8)',
+                    borderColor: '#FFD700',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: 'white', font: { size: 14 } }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { 
+                            color: 'white',
+                            callback: function(value) {
+                                return '$' + (value / 1000000).toFixed(0) + 'M';
+                            }
+                        },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: 'white' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                }
+            }
+        });
+
+        // Carbon Impact Chart
+        const carbonCtx = document.getElementById('carbonImpactChart').getContext('2d');
+        new Chart(carbonCtx, {
+            type: 'bar',
+            data: {
+                labels: ['AWS', 'Microsoft', 'Google', 'Kiwon Year 1', 'Kiwon Year 3', 'Kiwon Year 5'],
+                datasets: [{
+                    label: 'CO2 Impact (Tons/Year)',
+                    data: [2400, 2100, 1800, -300, -1500, -3000],
+                    backgroundColor: [
+                        'rgba(255, 107, 107, 0.8)',
+                        'rgba(255, 107, 107, 0.8)',
+                        'rgba(255, 107, 107, 0.8)',
+                        'rgba(126, 211, 33, 0.8)',
+                        'rgba(126, 211, 33, 0.8)',
+                        'rgba(126, 211, 33, 0.8)'
+                    ],
+                    borderColor: [
+                        '#FF6B6B', '#FF6B6B', '#FF6B6B',
+                        '#7ED321', '#7ED321', '#7ED321'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: 'white', font: { size: 14 } }
+                    }
+                },
+                scales: {
+                    y: {
+                        ticks: { color: 'white' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: 'white' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                }
+            }
+        });
+
+        // YouTube Growth Chart
+        const youtubeCtx = document.getElementById('youtubeGrowthChart').getContext('2d');
+        new Chart(youtubeCtx, {
+            type: 'line',
+            data: {
+                labels: ['Now', '3 Mo', '6 Mo', '9 Mo', '12 Mo', '15 Mo', '18 Mo', '21 Mo', '24 Mo'],
+                datasets: [{
+                    label: 'YouTube Subscribers',
+                    data: [17000, 35000, 75000, 150000, 300000, 600000, 1200000, 2500000, 5000000],
+                    borderColor: '#FFD700',
+                    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                    borderWidth: 4,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: 'white', font: { size: 14 } }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { 
+                            color: 'white',
+                            callback: function(value) {
+                                if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
+                                if (value >= 1000) return (value / 1000).toFixed(0) + 'K';
+                                return value;
+                            }
+                        },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: 'white' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                }
+            }
+        });
+
+        // ROI Chart
+        const roiCtx = document.getElementById('roiChart').getContext('2d');
+        new Chart(roiCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Base AI Tech (50X)', 'Solar Advantage (75X)', 'ESG Premium (50X)', 'Environmental (25X)', 'Viral Marketing (25X)'],
+                datasets: [{
+                    data: [50, 75, 50, 25, 25],
+                    backgroundColor: [
+                        'rgba(74, 144, 226, 0.8)',
+                        'rgba(255, 215, 0, 0.8)',
+                        'rgba(126, 211, 33, 0.8)',
+                        'rgba(245, 166, 35, 0.8)',
+                        'rgba(255, 107, 107, 0.8)'
+                    ],
+                    borderColor: [
+                        '#4A90E2', '#FFD700', '#7ED321', '#F5A623', '#FF6B6B'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: 'white', font: { size: 12 } }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

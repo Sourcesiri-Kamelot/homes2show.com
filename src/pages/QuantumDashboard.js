@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import QuantumPropertyMatcher from '../components/QuantumPropertyMatcher';
 import { QuantumEnhancedLeadDashboard, QuantumIntegrationService } from '../components/QuantumIntegration';
-import MarylandLeadDashboard from '../../maryland-lead-system/frontend/MarylandLeadDashboard';
+import MarylandLeadDashboard from '../components/MarylandLeadDashboard';
 
 /**
  * 🌟 QUANTUM DASHBOARD - THE FUTURE OF REAL ESTATE 🌟

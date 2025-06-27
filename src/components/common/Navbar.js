@@ -15,6 +15,8 @@ const Navbar = () => {
   const navItems = [
     { id: 'home', label: 'Home', path: '/' },
     { id: 'pricing', label: 'Pricing', path: '/pricing' },
+    { id: 'quantum', label: 'Quantum AI', path: '/quantum' },
+    { id: 'virtual', label: 'Virtual Tours', path: '/virtual-showing' },
     { id: 'dashboard', label: 'Dashboard', path: '/dashboard' }
   ];
 

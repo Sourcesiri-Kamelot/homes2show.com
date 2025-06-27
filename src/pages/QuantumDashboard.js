@@ -106,72 +106,77 @@ const QuantumDashboard = () => {
   const tabs = [
     {
       id: 'quantum-matcher',
-      name: '🌟 Quantum Matcher',
-      description: 'AI-powered property matching using quantum behavioral analysis'
+      name: 'AI Property Matcher',
+      description: 'Advanced behavioral analysis and property matching'
     },
     {
       id: 'enhanced-leads',
-      name: '🧠 Enhanced Leads',
-      description: 'Maryland leads supercharged with quantum intelligence'
+      name: 'Lead Intelligence',
+      description: 'Maryland leads enhanced with predictive AI'
     },
     {
       id: 'quantum-analytics',
-      name: '📊 Quantum Analytics',
-      description: 'Real-time insights from the quantum dimension'
+      name: 'Analytics Dashboard',
+      description: 'Real-time insights and performance metrics'
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-orange-900">
-      {/* Quantum Header */}
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-purple-500/10 animate-pulse"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100">
+      {/* Professional Header */}
+      <div className="relative overflow-hidden bg-white border-b border-gray-200">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-purple-50/50"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           
           {/* Main Title */}
           <div className="text-center mb-8">
-            <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
-              🌟 QUANTUM REAL ESTATE 🌟
+            <div className="inline-flex items-center px-4 py-2 bg-blue-50 border border-blue-200 rounded-full mb-6">
+              <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 animate-pulse"></div>
+              <span className="text-sm font-medium text-blue-700">Advanced AI Technology</span>
+            </div>
+            
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+              Quantum Property Intelligence
             </h1>
-            <p className="text-2xl text-gray-300 mb-2">
-              The World's First Quantum-Powered Property Platform
+            <p className="text-xl text-gray-600 mb-2 max-w-3xl mx-auto">
+              Advanced behavioral AI platform for predictive property matching and client intelligence
             </p>
-            <p className="text-lg text-gray-400 mb-6">
-              Where Science Fiction Becomes Real Estate Reality
+            <p className="text-gray-500 mb-6">
+              Trusted by industry leaders for enterprise-grade real estate solutions
             </p>
             
-            {/* Quantum Status */}
-            <div className={`inline-flex items-center px-6 py-3 rounded-full border-2 transition-all duration-500 ${
+            {/* System Status */}
+            <div className={`inline-flex items-center px-6 py-3 rounded-lg border-2 transition-all duration-500 ${
               isQuantumActive 
-                ? 'border-green-400 bg-green-400/10 text-green-400' 
-                : 'border-orange-400 bg-orange-400/10 text-orange-400'
+                ? 'border-green-200 bg-green-50 text-green-700' 
+                : 'border-orange-200 bg-orange-50 text-orange-700'
             }`}>
               <div className={`w-3 h-3 rounded-full mr-3 ${
-                isQuantumActive ? 'bg-green-400 animate-pulse' : 'bg-orange-400 animate-bounce'
+                isQuantumActive ? 'bg-green-500 animate-pulse' : 'bg-orange-500 animate-bounce'
               }`}></div>
               <span className="font-semibold">
-                {isQuantumActive ? '🌟 QUANTUM FIELD ACTIVE' : '⚡ INITIALIZING QUANTUM FIELD'}
+                {isQuantumActive ? 'AI System Active' : 'Initializing AI System'}
               </span>
             </div>
           </div>
 
-          {/* Real-time Metrics */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-black/30 backdrop-blur-sm rounded-lg p-4 border border-orange-500/30 text-center">
-              <div className="text-2xl font-bold text-orange-400">{realTimeMetrics.activeUsers}</div>
-              <div className="text-sm text-gray-400">Active Quantum Users</div>
+          {/* Professional Metrics */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+            <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm text-center">
+              <div className="text-3xl font-bold text-blue-600">{realTimeMetrics.activeUsers}</div>
+              <div className="text-sm text-gray-600 mt-1">Active Sessions</div>
             </div>
-            <div className="bg-black/30 backdrop-blur-sm rounded-lg p-4 border border-purple-500/30 text-center">
-              <div className="text-2xl font-bold text-purple-400">{realTimeMetrics.quantumMatches}</div>
-              <div className="text-sm text-gray-400">Quantum Matches Made</div>
+            <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm text-center">
+              <div className="text-3xl font-bold text-purple-600">{realTimeMetrics.quantumMatches}</div>
+              <div className="text-sm text-gray-600 mt-1">AI Matches Generated</div>
             </div>
-            <div className="bg-black/30 backdrop-blur-sm rounded-lg p-4 border border-green-500/30 text-center">
-              <div className="text-2xl font-bold text-green-400">{realTimeMetrics.successRate.toFixed(1)}%</div>
-              <div className="text-sm text-gray-400">Success Rate</div>
+            <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm text-center">
+              <div className="text-3xl font-bold text-green-600">{realTimeMetrics.successRate.toFixed(1)}%</div>
+              <div className="text-sm text-gray-600 mt-1">Prediction Accuracy</div>
             </div>
-            <div className="bg-black/30 backdrop-blur-sm rounded-lg p-4 border border-blue-500/30 text-center">
-              <div className="text-2xl font-bold text-blue-400">{realTimeMetrics.mindBlownCount}</div>
-              <div className="text-sm text-gray-400">Minds Blown Today</div>
+            <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm text-center">
+              <div className="text-3xl font-bold text-orange-600">{Math.round(quantumData.quantumEntanglement)}%</div>
+              <div className="text-sm text-gray-600 mt-1">System Engagement</div>
             </div>
           </div>
 
@@ -196,19 +201,19 @@ const QuantumDashboard = () => {
             </div>
           )}
 
-          {/* Navigation Tabs */}
-          <div className="flex flex-wrap justify-center gap-4">
+          {/* Professional Navigation Tabs */}
+          <div className="flex flex-wrap justify-center gap-2">
             {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-6 py-4 rounded-lg font-medium transition-all duration-300 border-2 ${
+                className={`px-6 py-3 rounded-lg font-medium transition-all duration-300 border ${
                   activeTab === tab.id
-                    ? 'bg-gradient-to-r from-orange-500 to-purple-500 text-white border-transparent shadow-lg shadow-orange-500/25'
-                    : 'bg-black/30 text-gray-300 border-gray-600 hover:border-orange-500/50 hover:bg-black/50'
+                    ? 'bg-blue-600 text-white border-blue-600 shadow-lg'
+                    : 'bg-white text-gray-700 border-gray-200 hover:border-blue-300 hover:bg-blue-50'
                 }`}
               >
-                <div className="text-lg font-semibold">{tab.name}</div>
+                <div className="text-base font-semibold">{tab.name}</div>
                 <div className="text-sm opacity-80">{tab.description}</div>
               </button>
             ))}

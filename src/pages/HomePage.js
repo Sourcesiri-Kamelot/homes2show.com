@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import nyashaImage from '../assets/images/neenew.png';
+import QuantumSection from '../components/QuantumSection';
 
 /**
  * HomePage Component
@@ -181,6 +182,9 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+
+      {/* Quantum AI Section */}
+      <QuantumSection />
 
       {/* Founder/Creator Section */}
       <div className="relative py-16 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">

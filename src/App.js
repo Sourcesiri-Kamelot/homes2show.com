@@ -5,6 +5,8 @@ import Footer from './components/common/Footer';
 import CookieConsent from './components/common/CookieConsent';
 import LoadingSpinner from './components/common/LoadingSpinner';
 import LegalDisclaimers from './components/legal/LegalDisclaimers';
+import NARSettlementGuidance from './components/compliance/NARSettlementGuidance';
+import StateComplianceInfo from './components/compliance/StateComplianceInfo';
 
 // Lazy load pages for better performance
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -41,8 +43,8 @@ export default function App() {
         
         {/* Legal Disclaimer Banner - Required on every page */}
         <div className="bg-red-600 text-white py-2 px-4 text-center text-sm">
-          <strong>LEGAL NOTICE:</strong> Homes2Show is NOT a real estate brokerage. 
-          All transactions must be conducted through licensed professionals.
+          <strong>LEGAL NOTICE:</strong> Homes2Show is not a real estate brokerage, regulatory agency, or trade association. 
+          We do not enforce any regulation or agreement.
           <a href="/legal" className="ml-2 underline hover:text-red-200">
             View Full Disclaimers
           </a>
@@ -81,6 +83,23 @@ export default function App() {
                   <div className="max-w-4xl mx-auto py-12 px-4">
                     <h1 className="text-3xl font-bold text-gray-900 mb-8">Legal Disclaimers</h1>
                     <LegalDisclaimers variant="full" />
+                  </div>
+                } 
+              />
+              <Route 
+                path="/nar-settlement" 
+                element={
+                  <div className="max-w-4xl mx-auto py-12 px-4">
+                    <NARSettlementGuidance />
+                  </div>
+                } 
+              />
+              <Route 
+                path="/state-commissions" 
+                element={
+                  <div className="max-w-4xl mx-auto py-12 px-4">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-8">State Real Estate Commissions</h1>
+                    <StateComplianceInfo />
                   </div>
                 } 
               />

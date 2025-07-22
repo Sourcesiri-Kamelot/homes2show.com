@@ -4,6 +4,7 @@ import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import CookieConsent from './components/common/CookieConsent';
 import LoadingSpinner from './components/common/LoadingSpinner';
+import LegalDisclaimers from './components/legal/LegalDisclaimers';
 
 // Lazy load pages for better performance
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -14,22 +15,22 @@ const SignInPage = lazy(() => import('./pages/SignInPage'));
 const PaymentPage = lazy(() => import('./pages/PaymentPage'));
 const VirtualShowingStudio = lazy(() => import('./components/virtual/VirtualShowingStudio'));
 const QuantumDashboard = lazy(() => import('./pages/QuantumDashboard'));
+const BrokerAuthPage = lazy(() => import('./pages/BrokerAuthPage'));
 
 /**
  * Main App Component - Homes2Show AI Platform
  * Created by: Nyasha Bivins
  * Powered by: Helo IM AI Inc. | https://www.helo-im.ai
  * 
- * 🌟 QUANTUM BREAKTHROUGH UPDATE 🌟
- * Now featuring the world's first Quantum Property Matching System!
- * Revolutionary AI that predicts perfect properties before clients know they want them.
+ * 🏠 LEGAL COMPLIANCE UPDATE 🏠
+ * Now fully compliant with real estate laws and regulations!
+ * - Licensed broker/agent authentication required
+ * - No property valuations or investment advice
+ * - Clear disclaimers on every page
+ * - Compliant AI tools that empower licensed professionals
  * 
- * Phase 4: AWS Authentication & Payment Integration
- * Phase 5: QUANTUM REAL ESTATE REVOLUTION (NEW!)
- * - Quantum behavioral analysis and property matching
- * - AI-enhanced lead generation with subconscious preference detection
- * - Real-time emotional resonance tracking
- * - Predictive desire mapping technology
+ * IMPORTANT: This platform is NOT a real estate brokerage.
+ * We connect consumers with licensed real estate professionals.
  */
 export default function App() {
   return (
@@ -37,6 +38,15 @@ export default function App() {
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 via-white to-gray-50">
         {/* Navigation */}
         <Navbar />
+        
+        {/* Legal Disclaimer Banner - Required on every page */}
+        <div className="bg-red-600 text-white py-2 px-4 text-center text-sm">
+          <strong>LEGAL NOTICE:</strong> Homes2Show is NOT a real estate brokerage. 
+          All transactions must be conducted through licensed professionals.
+          <a href="/legal" className="ml-2 underline hover:text-red-200">
+            View Full Disclaimers
+          </a>
+        </div>
         
         {/* Main Content with Suspense for lazy loading */}
         <main className="flex-grow">
@@ -48,6 +58,63 @@ export default function App() {
                 element={<HomePage />} 
               />
               <Route 
+                path="/pricing" 
+                element={<PricingPage />} 
+              />
+              <Route 
+                path="/signup" 
+                element={<SignUpPage />} 
+              />
+              <Route 
+                path="/signin" 
+                element={<SignInPage />} 
+              />
+              
+              {/* Legal Compliance Routes */}
+              <Route 
+                path="/broker-auth" 
+                element={<BrokerAuthPage />} 
+              />
+              <Route 
+                path="/legal" 
+                element={
+                  <div className="max-w-4xl mx-auto py-12 px-4">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-8">Legal Disclaimers</h1>
+                    <LegalDisclaimers variant="full" />
+                  </div>
+                } 
+              />
+              
+              {/* Protected Routes - Require License Verification */}
+              <Route 
+                path="/dashboard" 
+                element={<DashboardPage />} 
+              />
+              <Route 
+                path="/payment" 
+                element={<PaymentPage />} 
+              />
+              <Route 
+                path="/virtual-showing" 
+                element={<VirtualShowingStudio />} 
+              />
+              <Route 
+                path="/quantum-dashboard" 
+                element={<QuantumDashboard />} 
+              />
+            </Routes>
+          </Suspense>
+        </main>
+
+        {/* Footer with Legal Links */}
+        <Footer />
+        
+        {/* Cookie Consent */}
+        <CookieConsent />
+      </div>
+    </Router>
+  );
+}
                 path="/pricing" 
                 element={<PricingPage />} 
               />

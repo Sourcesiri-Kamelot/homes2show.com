@@ -1,143 +1,261 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 /**
- * Footer Component
- * Professional footer for Homes2Show AI platform
- * Features AI branding and comprehensive site links
- * Created by: Nyasha Bivins | Powered by: Helo IM AI Inc.
+ * Comprehensive Footer Component
+ * Matches and enhances Showami's footer structure
+ * Includes all product categories and legal compliance
  */
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
-  const footerLinks = [
-    { label: 'About', href: '#', category: 'company' },
-    { label: 'AI Features', href: '#', category: 'product' },
-    { label: 'Community Guidelines', href: '#', category: 'support' },
-    { label: 'Contact', href: '#', category: 'support' },
-    { label: 'Terms', href: '#', category: 'legal' },
-    { label: 'Privacy', href: '#', category: 'legal' }
+
+  const footerSections = {
+    products: {
+      title: 'Products',
+      links: [
+        { name: 'Standard Showings Platform', href: '/platform' },
+        { name: 'Buyer\'s Agent Best Practices', href: '/buyers-agent-practices' },
+        { name: 'Showing Agent Best Practices', href: '/showing-agent-practices' },
+        { name: 'Listing Agent Assistance', href: '/listing-agent-assistance' },
+        { name: 'Consumer Showings', href: '/consumer-showings' },
+        { name: 'Brokerage Solution', href: '/brokerage-solution' },
+        { name: 'Elite Brokerage Solution', href: '/elite-brokerage' },
+        { name: 'Property Management', href: '/property-management' },
+        { name: 'Rental Showings', href: '/rental-showings' },
+        { name: 'Rental Open Houses', href: '/rental-open-houses' },
+        { name: 'Property Management Pro', href: '/property-management-pro' },
+        { name: 'Landlords', href: '/landlords' },
+        { name: 'Enterprise Solutions', href: '/enterprise' },
+        { name: 'Advanced Enterprise Solutions', href: '/advanced-enterprise' }
+      ]
+    },
+    premium: {
+      title: 'Homes2Show Pro',
+      links: [
+        { name: 'General Information', href: '/pro' },
+        { name: 'Referral Network', href: '/pro/referrals' },
+        { name: 'Open Houses', href: '/pro/open-houses' },
+        { name: 'Inspections', href: '/pro/inspections' },
+        { name: 'Appraisals', href: '/pro/appraisals' },
+        { name: 'Multimedia Showing Requests', href: '/pro/multimedia' },
+        { name: 'Client Portal', href: '/pro/client-portal' },
+        { name: 'Tasks - Lock Box Runner', href: '/pro/lockbox-runner' },
+        { name: 'Tasks - Condition Reports', href: '/pro/condition-reports' },
+        { name: 'Groups Feature', href: '/pro/groups' },
+        { name: 'AI-Enhanced Matching', href: '/pro/ai-matching', badge: 'Enhanced' },
+        { name: 'Advanced Analytics', href: '/pro/analytics', badge: 'Enhanced' }
+      ]
+    },
+    resources: {
+      title: 'Resources',
+      links: [
+        { name: 'Tools & Courses', href: '/resources/tools' },
+        { name: 'Pricing', href: '/pricing' },
+        { name: 'Showing Agent Coverage', href: '/coverage' },
+        { name: 'Homes2Show Blog', href: '/blog' },
+        { name: 'Mobile App', href: '/app' },
+        { name: 'News and Updates', href: '/news' },
+        { name: 'Market Information', href: '/market-information', badge: 'New' },
+        { name: 'State Compliance Guide', href: '/state-compliance', badge: 'New' },
+        { name: 'NAR Settlement Resources', href: '/nar-settlement' }
+      ]
+    },
+    legal: {
+      title: 'Legal',
+      links: [
+        { name: 'Application End User License Agreement', href: '/terms' },
+        { name: 'Privacy Policy', href: '/privacy' },
+        { name: 'NAR Settlement Resources', href: '/nar-settlement' },
+        { name: 'State Real Estate Commissions', href: '/state-commissions' },
+        { name: 'Legal Disclaimers', href: '/legal' },
+        { name: 'Compliance Information', href: '/compliance' }
+      ]
+    },
+    company: {
+      title: 'Company',
+      links: [
+        { name: 'About', href: '/about' },
+        { name: 'Contact', href: '/contact' },
+        { name: 'Support', href: '/support' },
+        { name: 'Learn More', href: '/learn' },
+        { name: 'Testimonials', href: '/testimonials' },
+        { name: 'Frequently Asked Questions', href: '/faq' },
+        { name: 'Careers', href: '/careers', badge: 'New' },
+        { name: 'Press', href: '/press' }
+      ]
+    }
+  };
+
+  const socialLinks = [
+    { name: 'Twitter', href: 'https://twitter.com/homes2show', icon: '🐦' },
+    { name: 'LinkedIn', href: 'https://linkedin.com/company/homes2show', icon: '💼' },
+    { name: 'Facebook', href: 'https://facebook.com/homes2show', icon: '📘' },
+    { name: 'Instagram', href: 'https://instagram.com/homes2show', icon: '📷' }
   ];
 
   return (
-    <footer className="bg-gradient-to-br from-gray-800 via-gray-900 to-black relative overflow-hidden">
-      {/* AI-themed background pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-orange-500/10 to-purple-500/10"></div>
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-orange-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-40 h-40 bg-purple-500/5 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="relative max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          {/* Brand Section */}
-          <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center mb-4">
-              <svg 
-                className="w-8 h-8 text-orange-500" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" 
-                />
-              </svg>
-              <span className="ml-3 text-2xl font-bold text-white">Homes2Show</span>
-              <span className="ml-2 text-xs font-semibold text-orange-400 bg-orange-500/20 px-2 py-1 rounded-full">
-                AI-Powered
-              </span>
-            </div>
-            <p className="text-gray-300 text-sm leading-relaxed max-w-md mb-4">
-              Revolutionizing real estate showings with artificial intelligence. 
-              Connect with agents, optimize schedules, and close more deals with 
-              our advanced AI platform.
-            </p>
-            
-            {/* Creator Attribution */}
-            <div className="text-xs text-gray-400 space-y-1">
-              <p>Created by <span className="text-orange-400 font-medium">Nyasha Bivins</span></p>
-              <p>Powered by <a href="https://www.helo-im.ai" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 transition-colors duration-200 font-medium">Helo IM AI Inc.</a></p>
-            </div>
-            
-            <div className="flex items-center mt-4 space-x-4">
-              <div className="flex items-center text-xs text-gray-400">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                AI Systems Online
-              </div>
-              <div className="text-xs text-gray-400">
-                99.9% Uptime
+    <footer className="bg-gray-900 text-white">
+      {/* Main Footer Content */}
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+          {/* Company Info */}
+          <div className="lg:col-span-1">
+            <div className="mb-6">
+              <h3 className="text-2xl font-bold text-white mb-2">
+                🏠 Homes2Show
+              </h3>
+              <p className="text-gray-300 text-sm mb-4">
+                AI-enhanced real estate showing platform. Better than Showami with superior technology and compliance.
+              </p>
+              <div className="bg-blue-900 rounded-lg p-3 mb-4">
+                <p className="text-blue-200 text-xs font-medium">
+                  ⚖️ Fully Compliant Platform
+                </p>
+                <p className="text-blue-300 text-xs">
+                  Licensed professionals only. Not a brokerage.
+                </p>
               </div>
             </div>
+
+            {/* Social Links */}
+            <div className="flex space-x-4">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-white transition-colors"
+                  title={social.name}
+                >
+                  <span className="text-xl">{social.icon}</span>
+                </a>
+              ))}
+            </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Platform</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-orange-400 text-sm transition-colors duration-200">AI Dashboard</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-orange-400 text-sm transition-colors duration-200">Smart Matching</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-orange-400 text-sm transition-colors duration-200">Analytics</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-orange-400 text-sm transition-colors duration-200">API Access</a></li>
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Support</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-orange-400 text-sm transition-colors duration-200">Help Center</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-orange-400 text-sm transition-colors duration-200">AI Training</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-orange-400 text-sm transition-colors duration-200">Community</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-orange-400 text-sm transition-colors duration-200">Status Page</a></li>
-            </ul>
-          </div>
+          {/* Footer Sections */}
+          {Object.entries(footerSections).map(([key, section]) => (
+            <div key={key} className="lg:col-span-1">
+              <h4 className="text-lg font-semibold text-white mb-4">
+                {section.title}
+              </h4>
+              <ul className="space-y-2">
+                {section.links.map((link, index) => (
+                  <li key={index}>
+                    <Link
+                      to={link.href}
+                      className="text-gray-300 hover:text-white text-sm transition-colors flex items-center"
+                    >
+                      {link.name}
+                      {link.badge && (
+                        <span className={`ml-2 px-2 py-1 text-xs rounded-full ${
+                          link.badge === 'New' 
+                            ? 'bg-green-600 text-green-100' 
+                            : 'bg-blue-600 text-blue-100'
+                        }`}>
+                          {link.badge}
+                        </span>
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        {/* Footer Links */}
-        <div className="border-t border-gray-700 pt-8">
-          <nav className="flex flex-wrap justify-center space-x-6 mb-6">
-            {footerLinks.map((link, index) => (
-              <a
-                key={index}
-                href={link.href}
-                className="text-gray-400 hover:text-orange-400 text-sm transition-colors duration-200 hover:underline"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-
-          {/* Copyright and Attribution */}
-          <div className="flex flex-col sm:flex-row justify-between items-center text-center sm:text-left space-y-4 sm:space-y-0">
-            <div className="text-gray-400 text-sm">
-              <p>&copy; {currentYear} Homes2Show. All rights reserved.</p>
-              <p className="mt-1">
-                Created by <span className="text-orange-400">Nyasha Bivins</span> | 
-                Powered by <a href="https://www.helo-im.ai" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 transition-colors duration-200">Helo IM AI Inc.</a>
-              </p>
+        {/* Newsletter Signup */}
+        <div className="border-t border-gray-800 mt-12 pt-8">
+          <div className="max-w-md mx-auto text-center">
+            <h4 className="text-lg font-semibold text-white mb-2">
+              Stay Updated
+            </h4>
+            <p className="text-gray-300 text-sm mb-4">
+              Get the latest updates on new features and industry insights.
+            </p>
+            <div className="flex">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+              />
+              <button className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-r-lg transition-colors">
+                Subscribe
+              </button>
             </div>
-            
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center text-xs text-gray-500">
-                <svg className="w-3 h-3 mr-1 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 2.5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5a.75.75 0 01.75-.75z"/>
-                </svg>
-                Built with Intelligence
-              </div>
-              <div className="text-xs text-gray-500">
-                Version 2.0.0
-              </div>
-              <a 
-                href="https://www.helo-im.ai" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-xs text-orange-400 hover:text-orange-300 transition-colors duration-200"
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="border-t border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            {/* Copyright */}
+            <div className="text-gray-400 text-sm mb-4 md:mb-0">
+              © {currentYear} Homes2Show, Inc. All rights reserved.
+            </div>
+
+            {/* Legal Links */}
+            <div className="flex flex-wrap justify-center md:justify-end space-x-6 text-sm">
+              <Link to="/terms" className="text-gray-400 hover:text-white transition-colors">
+                Terms
+              </Link>
+              <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">
+                Privacy
+              </Link>
+              <Link to="/legal" className="text-gray-400 hover:text-white transition-colors">
+                Legal
+              </Link>
+              <Link to="/compliance" className="text-gray-400 hover:text-white transition-colors">
+                Compliance
+              </Link>
+            </div>
+          </div>
+
+          {/* Legal Disclaimer */}
+          <div className="mt-6 p-4 bg-red-900 rounded-lg">
+            <p className="text-red-200 text-xs text-center">
+              <strong>IMPORTANT:</strong> Homes2Show is not a real estate brokerage, regulatory agency, or trade association. 
+              We do not enforce any regulation or agreement. We are a technology platform that facilitates connections 
+              between consumers and licensed real estate professionals. All real estate transactions must be conducted 
+              through properly licensed brokers and agents.
+            </p>
+          </div>
+
+          {/* Competitive Notice */}
+          <div className="mt-4 text-center">
+            <p className="text-gray-500 text-xs">
+              🚀 Enhanced platform with superior AI technology and compliance features
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile App Download Banner */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between">
+            <div className="text-center sm:text-left mb-4 sm:mb-0">
+              <h4 className="text-white font-semibold">📱 Get the Homes2Show App</h4>
+              <p className="text-blue-100 text-sm">Enhanced mobile experience with AI features</p>
+            </div>
+            <div className="flex space-x-4">
+              <a
+                href="#"
+                className="bg-black text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors flex items-center"
               >
-                Learn More →
+                <span className="mr-2">📱</span>
+                App Store
+              </a>
+              <a
+                href="#"
+                className="bg-black text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors flex items-center"
+              >
+                <span className="mr-2">🤖</span>
+                Google Play
               </a>
             </div>
           </div>

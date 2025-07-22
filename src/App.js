@@ -121,6 +121,12 @@ export default function App() {
                 path="/quantum-dashboard" 
                 element={<QuantumDashboard />} 
               />
+              
+              {/* Catch-all route */}
+              <Route 
+                path="*" 
+                element={<HomePage />} 
+              />
             </Routes>
           </Suspense>
         </main>
@@ -129,60 +135,6 @@ export default function App() {
         <Footer />
         
         {/* Cookie Consent */}
-        <CookieConsent />
-      </div>
-    </Router>
-  );
-}
-                path="/pricing" 
-                element={<PricingPage />} 
-              />
-              
-              {/* Authentication Routes */}
-              <Route 
-                path="/signup" 
-                element={<SignUpPage />} 
-              />
-              <Route 
-                path="/signin" 
-                element={<SignInPage />} 
-              />
-              <Route 
-                path="/payment" 
-                element={<PaymentPage />} 
-              />
-              
-              {/* Virtual Showing - THE UNICORN FEATURE! */}
-              <Route 
-                path="/virtual-showing" 
-                element={<VirtualShowingStudio />} 
-              />
-              
-              {/* 🌟 QUANTUM DASHBOARD - THE REVOLUTIONARY BREAKTHROUGH! 🌟 */}
-              <Route 
-                path="/quantum" 
-                element={<QuantumDashboard />} 
-              />
-              
-              {/* Protected Route - Dashboard */}
-              <Route 
-                path="/dashboard" 
-                element={<DashboardPage />} 
-              />
-              
-              {/* Catch-all route - redirect to home */}
-              <Route 
-                path="*" 
-                element={<HomePage />} 
-              />
-            </Routes>
-          </Suspense>
-        </main>
-        
-        {/* Footer */}
-        <Footer />
-        
-        {/* Cookie Consent Banner */}
         <CookieConsent />
       </div>
     </Router>
